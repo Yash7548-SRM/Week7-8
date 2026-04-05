@@ -1,17 +1,19 @@
 public class NumberChecker {
     public static void main(String[] args) {
-        int number = 153;
+        int number = 21;
         int[] digits = storeDigits(number);
         System.out.println("Number of digits: " + countDigits(number));
         System.out.println("Digits array: ");
         for (int d : digits) System.out.print(d + " ");
         System.out.println();
-        System.out.println("Is Duck Number: " + isDuck(number));
-        System.out.println("Is Armstrong Number: " + isArmstrong(number));
-        int[] largest = largestTwo(digits);
-        System.out.println("Largest: " + largest[0] + ", Second Largest: " + largest[1]);
-        int[] smallest = smallestTwo(digits);
-        System.out.println("Smallest: " + smallest[0] + ", Second Smallest: " + smallest[1]);
+        System.out.println("Sum of digits: " + sumDigits(digits));
+        System.out.println("Sum of squares of digits: " + sumSquares(digits));
+        System.out.println("Is Harshad number: " + isHarshad(number, digits));
+        int[][] freq = digitFrequency(digits);
+        System.out.println("Digit Frequency:");
+        for (int i = 0; i < freq.length; i++) {
+            System.out.println(freq[i][0] + " : " + freq[i][1]);
+        }
     }
 
     public static int countDigits(int n) {
@@ -33,41 +35,26 @@ public class NumberChecker {
         return arr;
     }
 
-    public static boolean isDuck(int n) {
-        while (n > 0) {
-            if (n % 10 != 0) return true;
-            n /= 10;
-        }
-        return false;
-    }
-
-    public static boolean isArmstrong(int n) {
-        int[] digits = storeDigits(n);
+    public static int sumDigits(int[] arr) {
         int sum = 0;
-        int len = digits.length;
-        for (int d : digits) sum += Math.pow(d, len);
-        return sum == n;
+        for (int d : arr) sum += d;
+        return sum;
     }
 
-    public static int[] largestTwo(int[] arr) {
-        int max1 = Integer.MIN_VALUE, max2 = Integer.MIN_VALUE;
-        for (int n : arr) {
-            if (n > max1) {
-                max2 = max1;
-                max1 = n;
-            } else if (n > max2) max2 = n;
-        }
-        return new int[]{max1, max2};
+    public static int sumSquares(int[] arr) {
+        int sum = 0;
+        for (int d : arr) sum += Math.pow(d, 2);
+        return sum;
     }
 
-    public static int[] smallestTwo(int[] arr) {
-        int min1 = Integer.MAX_VALUE, min2 = Integer.MAX_VALUE;
-        for (int n : arr) {
-            if (n < min1) {
-                min2 = min1;
-                min1 = n;
-            } else if (n < min2) min2 = n;
-        }
-        return new int[]{min1, min2};
+    public static boolean isHarshad(int n, int[] digits) {
+        return n % sumDigits(digits) == 0;
+    }
+
+    public static int[][] digitFrequency(int[] digits) {
+        int[][] freq = new int[10][2];
+        for (int i = 0; i < 10; i++) freq[i][0] = i;
+        for (int d : digits) freq[d][1]++;
+        return freq;
     }
 }
